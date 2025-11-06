@@ -2,9 +2,6 @@ from gpiozero import PWMLED
 from time import sleep
 from time import time
 
-red = PWMLED(17)
-blue = PWMLED(18)
-
 class MotorController:
     def __enter__(self):
         self.left = PWMLED(17)

@@ -32,7 +32,7 @@ class MotorController:
         GPIO.output(PIN_R_CNTRL_2, GPIO.HIGH)
     
     def __exit__(self):
-        self.left.stop()
+        self.pwm.stop()
         GPIO.cleanup()
 
     

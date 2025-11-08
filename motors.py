@@ -31,7 +31,7 @@ class MotorController:
         GPIO.output(PIN_R_CNTRL_1, GPIO.LOW)
         GPIO.output(PIN_R_CNTRL_2, GPIO.HIGH)
     
-    def __exit__(self):
+    def __exit__(self, exc_type, exc_value, traceback):
         self.pwm.stop()
         GPIO.cleanup()
 

@@ -9,4 +9,6 @@ if __name__ == "__main__":
         sleep(1)
         motors.right_motor.reverse()
         sleep(2)
+        motors.right_motor.brake()
+        
         

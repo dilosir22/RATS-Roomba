@@ -16,8 +16,10 @@ class Motor:
         GPIO.setup(self.pin_cntrl_1, GPIO.OUT)
         GPIO.setup(self.pin_cntrl_2, GPIO.OUT)
 
-        self.pwm = GPIO.PWM(self.pin_pwm, 1000)
-        self.pwm.start(50)
+        #self.pwm = GPIO.PWM(self.pin_pwm, 1000)
+        #self.pwm.start(50)
+        GPIO.setup(self.pin_pwm, GPIO.OUT)
+        GPIO.output(self.pin_pwm, GPIO.HIGH)
     
     def brake(self):
         GPIO.output(self.pin_cntrl_1, GPIO.LOW)
@@ -31,17 +33,17 @@ class Motor:
         GPIO.output(self.pin_cntrl_1, GPIO.HIGH)
         GPIO.output(self.pin_cntrl_2, GPIO.LOW)
 
-        speed = min(speed, 100) #A simple clamp
-        speed = max(speed, 0)
-        self.pwm.ChangeDutyCycle(speed)
+        #speed = min(speed, 100) #A simple clamp
+        #speed = max(speed, 0)
+        #self.pin_pwm.ChangeDutyCycle(speed)
 
     def reverse(self, speed = 50):
         GPIO.output(self.pin_cntrl_1, GPIO.LOW)
         GPIO.output(self.pin_cntrl_2, GPIO.HIGH)
 
-        speed = min(speed, 100) #A simple clamp
-        speed = max(speed, 0)
-        self.pwm.ChangeDutyCycle(speed)
+        #speed = min(speed, 100) #A simple clamp
+        #speed = max(speed, 0)
+        #self.pin_pwm.ChangeDutyCycle(speed)
 
     def cleanup(self):
         self.pwm.stop()

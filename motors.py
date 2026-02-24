@@ -47,6 +47,7 @@ class Motor:
 
     def cleanup(self):
         #self.pwm.stop()
+        GPIO.cleanup((self.pin_cntrl_1, self.pin_cntrl_2, self.pin_pwm))
 
 class MotorController:
     def __init__(self):

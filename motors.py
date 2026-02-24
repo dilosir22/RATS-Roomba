@@ -47,6 +47,14 @@ class Motor:
         self.pwm.stop()
 
 class MotorController:
+    def __init__(self):
+        GPIO.setmode(GPIO.BCM)
+        self.right_motor = Motor(PIN_R_PWM, PIN_R_CNTRL_1, PIN_R_CNTRL_2)
+
+    def cleanup(self):
+        self.right_motor.cleanup()
+        GPIO.cleanup()
+
     def __enter__(self):
         GPIO.setmode(GPIO.BCM)
         self.right_motor = Motor(PIN_R_PWM, PIN_R_CNTRL_1, PIN_R_CNTRL_2)
@@ -54,8 +62,7 @@ class MotorController:
         return self
     
     def __exit__(self, exc_type, exc_value, traceback):
-        self.right_motor.cleanup()
-        GPIO.cleanup()
+        self.cleanup()
         return False # do not suppress exceptions
         
 

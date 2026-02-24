@@ -46,7 +46,7 @@ class Motor:
         #self.pin_pwm.ChangeDutyCycle(speed)
 
     def cleanup(self):
-        self.pwm.stop()
+        #self.pwm.stop()
 
 class MotorController:
     def __init__(self):

@@ -37,6 +37,7 @@ class Motor:
 
     def cleanup(self):
         self.pwm.stop()
+        del self.pwm
 
 class MotorController:
     def __init__(self):

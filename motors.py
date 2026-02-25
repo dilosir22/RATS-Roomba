@@ -46,8 +46,9 @@ class Motor:
         #self.pin_pwm.ChangeDutyCycle(speed)
 
     def cleanup(self):
-        self.pwm.stop()
-        del self.pwm
+        pass
+        #self.pwm.stop()
+        #del self.pwm
 
 class MotorController:
     def __init__(self):
@@ -57,16 +58,6 @@ class MotorController:
     def cleanup(self):
         self.right_motor.cleanup()
         GPIO.cleanup()
-
-    def __enter__(self):
-        GPIO.setmode(GPIO.BCM)
-        self.right_motor = Motor(PIN_R_PWM, PIN_R_CNTRL_1, PIN_R_CNTRL_2)
-
-        return self
-    
-    def __exit__(self, exc_type, exc_value, traceback):
-        self.cleanup()
-        return False # do not suppress exceptions
         
 
     

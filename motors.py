@@ -6,6 +6,10 @@ PIN_R_PWM = 18
 PIN_R_CNTRL_1 = 17
 PIN_R_CNTRL_2 = 27
 
+PIN_L_PWM = 12
+PIN_L_CNTRL_1 = 5
+PIN_L_CNTRL_2 = 6
+
 class Motor:
     def __init__(self, pin_pwm, pin_cntrl_1, pin_cntrl_2):
         self.pin_pwm = pin_pwm
@@ -57,9 +61,11 @@ class MotorController:
     def __init__(self):
         GPIO.setmode(GPIO.BCM)
         self.right_motor = Motor(PIN_R_PWM, PIN_R_CNTRL_1, PIN_R_CNTRL_2)
+        self.left_motor = Motor(PIN_L_PWM, PIN_L_CNTRL_1, PIN_L_CNTRL_2)
 
     def cleanup(self):
         self.right_motor.cleanup()
+        self.left_motor.cleanup()
         GPIO.cleanup()
         
 

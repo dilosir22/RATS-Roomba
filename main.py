@@ -14,7 +14,7 @@ if __name__ == "__main__":
 
     now = 0
     previous = getTime()
-    steps = 0, frames = 0
+    steps, frames = 0, 0
     while shouldRun:
         now = getTime()
         dtime = now - previous

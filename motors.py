@@ -1,6 +1,6 @@
 import RPi.GPIO as GPIO
-from time import sleep
-from time import time
+from enum import Enum
+from time import monotonic, sleep
 
 PIN_R_PWM = 18
 PIN_R_CNTRL_1 = 17
@@ -9,6 +9,8 @@ PIN_R_CNTRL_2 = 27
 PIN_L_PWM = 12
 PIN_L_CNTRL_1 = 5
 PIN_L_CNTRL_2 = 6
+
+SAFETY_BRAKE_TIME = 0.1
 
 class Motor:
     def __init__(self, pin_pwm, pin_cntrl_1, pin_cntrl_2):
@@ -21,10 +23,8 @@ class Motor:
         GPIO.setup(self.pin_cntrl_2, GPIO.OUT)
 
         self.pwm = GPIO.PWM(self.pin_pwm, 1000)
-        self.pwm.start(50)
+        self.pwm.start(0)
         self.float()
-        #GPIO.setup(self.pin_pwm, GPIO.OUT)
-        #GPIO.output(self.pin_pwm, GPIO.HIGH)
 
     def set_speed(self, speed):
         speed = min(speed, 100) #A simple clamp
@@ -40,14 +40,12 @@ class Motor:
         GPIO.output(self.pin_cntrl_2, GPIO.HIGH)
 
     def forward(self, speed = 50):
-
         self.set_speed(speed)
 
         GPIO.output(self.pin_cntrl_1, GPIO.HIGH)
         GPIO.output(self.pin_cntrl_2, GPIO.LOW)
 
     def reverse(self, speed = 50):
-
         self.set_speed(speed)
 
         GPIO.output(self.pin_cntrl_1, GPIO.LOW)

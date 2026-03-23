@@ -36,6 +36,7 @@ class Motor:
             case Direction.REVERSE: self.__reverse()
 
     def set_speed(self, speed):
+        if speed is None: return
         speed = min(speed, 100) #A simple clamp
         speed = max(speed, 0)
         self.pwm.ChangeDutyCycle(speed)
@@ -54,7 +55,7 @@ class Motor:
         GPIO.output(self.pin_cntrl_1, GPIO.HIGH)
         GPIO.output(self.pin_cntrl_2, GPIO.HIGH)
 
-    def forward(self, speed = 50):
+    def forward(self, speed = None):
         self.set_speed(speed)
         self.state.update(Direction.FORWARD)
 
@@ -62,7 +63,7 @@ class Motor:
         GPIO.output(self.pin_cntrl_1, GPIO.HIGH)
         GPIO.output(self.pin_cntrl_2, GPIO.LOW)
 
-    def reverse(self, speed = 50):
+    def reverse(self, speed = None):
         self.set_speed(speed)
         self.state.update(Direction.REVERSE)
 
@@ -79,7 +80,6 @@ class MotorController:
         GPIO.setmode(GPIO.BCM)
         self.right_motor = Motor(PIN_R_PWM, PIN_R_CNTRL_1, PIN_R_CNTRL_2)
         self.left_motor = Motor(PIN_L_PWM, PIN_L_CNTRL_1, PIN_L_CNTRL_2)
-
 
     def update_both(self):
         self.right_motor.update()

@@ -4,15 +4,9 @@ from time import time as getTime
 import keyboard
 
 
-def update(dtime):
-
-    return
-
 shouldRun = True
 targetFPS = 60
 targetTPS = 100
-
-
 
 if __name__ == "__main__":
 
@@ -33,6 +27,9 @@ if __name__ == "__main__":
                 motors.forward(50)
             elif keyboard.is_pressed("s"):
                 motors.reverse(50)
+            
+            if keyboard.is_pressed("esc"):
+                shouldRun = False
             
             frames -= 1
 

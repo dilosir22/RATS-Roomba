@@ -81,6 +81,30 @@ class MotorController:
         self.right_motor = Motor(PIN_R_PWM, PIN_R_CNTRL_1, PIN_R_CNTRL_2)
         self.left_motor = Motor(PIN_L_PWM, PIN_L_CNTRL_1, PIN_L_CNTRL_2)
 
+    def forward(self, speed = None):
+        self.right_motor.forward(speed)
+        self.left_motor.forward(speed)
+
+    def reverse(self, speed = None):
+        self.right_motor.reverse(speed)
+        self.left_motor.reverse(speed)
+
+    def brake(self):
+        self.right_motor.brake()
+        self.left_motor.brake()
+
+    def float(self):
+        self.right_motor.float()
+        self.left_motor.float()
+
+    def right(self, speed=None):
+        self.right_motor.forward(speed)
+        self.left_motor.reverse(speed)
+
+    def left(self, speed=None):
+        self.right_motor.reverse(speed)
+        self.left_motor.forward(speed)
+
     def update_both(self):
         self.right_motor.update()
         self.left_motor.update()

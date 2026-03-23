@@ -1,28 +1,49 @@
 from motors import MotorController
 from time import sleep
+from time import time as getTime
+import keyboard
+
+
+def update(dtime):
+
+    return
+
+shouldRun = True
+targetFPS = 60
+targetTPS = 100
+
+
 
 if __name__ == "__main__":
-    
+
     motors = MotorController()
 
-    print("Forward 25%")
-    motors.right_motor.forward(25)
-    sleep(2)
-    
-    print("Forward 50%")
-    motors.right_motor.forward(50)
-    sleep(2)
+    now = 0
+    previous = getTime()
+    steps = 0, frames = 0
+    while shouldRun:
+        now = getTime()
+        dtime = now - previous
+        ticks += dtime * targetTPS
+        frames += dtime * targetFPS
 
-    print("Forward 75%")
-    motors.right_motor.forward(75)
-    sleep(2)
+        if(targetFPS <= 0 or frames >= 1):
+            speed = 0
+            if keyboard.is_pressed("w"):
+                motors.forward(50)
+            elif keyboard.is_pressed("s"):
+                motors.reverse(50)
+            
+            frames -= 1
 
-    print("Forward 100%")
-    motors.right_motor.forward(100)
-    sleep(2)
+        if(ticks >= 1):
+            #run tick
+            motors.update_both()
+            ticks -= 1
+        
+        previous = now
 
-    print("Brake")
-    motors.right_motor.brake()
+
     motors.cleanup()
         
         

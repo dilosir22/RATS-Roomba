@@ -1,6 +1,5 @@
 import RPi.GPIO as GPIO
-from enum import Enum
-from time import monotonic, sleep
+from motor_state import *
 
 PIN_R_PWM = 18
 PIN_R_CNTRL_1 = 17
@@ -9,8 +8,6 @@ PIN_R_CNTRL_2 = 27
 PIN_L_PWM = 12
 PIN_L_CNTRL_1 = 5
 PIN_L_CNTRL_2 = 6
-
-SAFETY_BRAKE_TIME = 0.1
 
 class Motor:
     def __init__(self, pin_pwm, pin_cntrl_1, pin_cntrl_2):
@@ -24,30 +21,52 @@ class Motor:
 
         self.pwm = GPIO.PWM(self.pin_pwm, 1000)
         self.pwm.start(0)
+
+        self.state = MotorStateController()
+
         self.float()
+
+    def update(self):
+        dir = self.state.update_and_get()
+
+        match dir:
+            case Direction.BRAKE: self.__brake()
+            case Direction.FLOAT: self.__float()
+            case Direction.FORWARD: self.__forward()
+            case Direction.REVERSE: self.__reverse()
 
     def set_speed(self, speed):
         speed = min(speed, 100) #A simple clamp
         speed = max(speed, 0)
         self.pwm.ChangeDutyCycle(speed)
-    
+
     def brake(self):
+        self.state.update(Direction.BRAKE)
+    
+    def __brake(self):
         GPIO.output(self.pin_cntrl_1, GPIO.LOW)
         GPIO.output(self.pin_cntrl_2, GPIO.LOW)
-    
+        
     def float(self):
+        self.state.update(Direction.FLOAT)
+    
+    def __float(self):
         GPIO.output(self.pin_cntrl_1, GPIO.HIGH)
         GPIO.output(self.pin_cntrl_2, GPIO.HIGH)
 
     def forward(self, speed = 50):
         self.set_speed(speed)
+        self.state.update(Direction.FORWARD)
 
+    def __forward(self):
         GPIO.output(self.pin_cntrl_1, GPIO.HIGH)
         GPIO.output(self.pin_cntrl_2, GPIO.LOW)
 
     def reverse(self, speed = 50):
         self.set_speed(speed)
+        self.state.update(Direction.REVERSE)
 
+    def __reverse(self):
         GPIO.output(self.pin_cntrl_1, GPIO.LOW)
         GPIO.output(self.pin_cntrl_2, GPIO.HIGH)
 
@@ -60,6 +79,11 @@ class MotorController:
         GPIO.setmode(GPIO.BCM)
         self.right_motor = Motor(PIN_R_PWM, PIN_R_CNTRL_1, PIN_R_CNTRL_2)
         self.left_motor = Motor(PIN_L_PWM, PIN_L_CNTRL_1, PIN_L_CNTRL_2)
+
+
+    def update_both(self):
+        self.right_motor.update()
+        self.left_motor.update()
 
     def cleanup(self):
         self.right_motor.cleanup()

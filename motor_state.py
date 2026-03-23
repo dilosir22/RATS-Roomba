@@ -28,13 +28,16 @@ class MotorStateController:
          self.last_input = start_direction
          self.wait_start_time = monotonic()
 
-    def update_and_get(self, input: Direction = None) -> Direction:
+
+    def update(self, input: Direction = None):
         if (input is None):
             input = self.last_input
         self.last_input = input
 
         self.__update_state(input)
 
+    def update_and_get(self, input: Direction = None) -> Direction:
+        self.update(input)
         return self.__get_value(input)
 
     def __update_state(self, input: Direction):

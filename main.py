@@ -1,67 +1,33 @@
 from motors import MotorController
-from time import sleep
-from time import time as getTime
-from pynput import keyboard
+from time import perf_counter
+import curses
 
-w_down = False
-s_down = False
-
-shouldRun = True
-targetFPS = 60
-targetTPS = 60
-
-
-def on_pressed(key, injected):
-    if key == keyboard.Key.esc:
-        shouldRun = False
-    if key == 'w':
-        w_down = True
-    if key == 's':
-        s_down = True
-
-def on_released(key, injected):
-    if key == 'w':
-        w_down = False
-    if key == 's':
-        s_down = False
-
-
-if __name__ == "__main__":
-
-    litsener = keyboard.Listener(on_pressed, on_released)
-    litsener.start()
-
+def main(stdscr: curses.window):
     motors = MotorController()
+    motors.set_speed(25)
 
-    now = 0
-    previous = getTime()
-    steps, frames = 0, 0
-    while shouldRun:
-        now = getTime()
-        dtime = now - previous
-        ticks += dtime * targetTPS
-        frames += dtime * targetFPS
+    stdscr.addstr(0, 0, "Robot running. wasd to move, q to quit.")
+    time_init = perf_counter()
+    while True:
+        key = stdscr.getch()
+        fw = 0
+        lr = 0
+        if key == ord("q"): break
+        if key == ord("w"): fw += 1
+        if key == ord("s"): fw -= 1
+        if key == ord("a"): lr = -1
+        if key == ord("d"): lr += 1
 
-        if(targetFPS <= 0 or frames >= 1):
-            speed = 0
-            if w_down:
-                motors.forward(50)
-            elif s_down:
-                motors.reverse(50)
-            
-            if keyboard.is_pressed("esc"):
-                shouldRun = False
-            
-            frames -= 1
+        if lr == -1: motors.left()
+        elif lr == 1: motors.right()
+        elif fw == 1: motors.forward()
+        elif fw == -1: motors.reverse()
 
-        if(ticks >= 1):
-            #run tick
-            motors.update_both()
-            ticks -= 1
-        
-        previous = now
-
+        motors.update_both()
 
     motors.cleanup()
+
+if __name__ == "__main__":
+    curses.wrapper(main)
         
         

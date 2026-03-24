@@ -73,7 +73,7 @@ class Motor:
 
     def cleanup(self):
         self.pwm.stop()
-        del self.pwm
+        del self.pwm # have to do this or python blows up on shutdown
 
 class MotorController:
     def __init__(self):
@@ -88,6 +88,10 @@ class MotorController:
     def reverse(self, speed = None):
         self.right_motor.reverse(speed)
         self.left_motor.reverse(speed)
+
+    def set_speed(self, speed):
+        self.right_motor.set_speed(speed)
+        self.left_motor.set_speed(speed)
 
     def brake(self):
         self.right_motor.brake()

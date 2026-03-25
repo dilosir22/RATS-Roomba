@@ -18,10 +18,20 @@ def main(stdscr: curses.window):
         if key == ord("a"): lr = -1
         if key == ord("d"): lr += 1
 
-        if lr == -1: motors.left()
-        elif lr == 1: motors.right()
-        elif fw == 1: motors.forward()
-        elif fw == -1: motors.reverse()
+        stdscr.move(1, 0)
+        stdscr.clrtoeol()
+        if lr == -1:
+            stdscr.addstr(1, 0, "Moving left") 
+            motors.left()
+        elif lr == 1: 
+            stdscr.addstr(1, 0, "Moving right") 
+            motors.right()
+        elif fw == 1: 
+            stdscr.addstr(1, 0, "Moving forward") 
+            motors.forward()
+        elif fw == -1: 
+            stdscr.addstr(1, 0, "Moving backward") 
+            motors.reverse()
 
         motors.update_both()
 

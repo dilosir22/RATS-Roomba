@@ -1,5 +1,11 @@
-import RPi.GPIO as GPIO
+
 from motor_state import *
+
+# import RPi.GPIO if it exists: otherwise simulate it
+try:
+    import RPi.GPIO as GPIO
+except ImportError:
+    import FakeRPi.GPIO as GPIO
 
 PIN_R_PWM = 18
 PIN_R_CNTRL_1 = 17

@@ -55,11 +55,11 @@ class MotorStateController:
             if (dt >= SAFETY_BRAKE_TIME):
                 self.state = _State(input.value)
 
-        elif (self.state == _State.Forward):
+        elif (self.state == _State.FORWARD):
             self.state = _State.WAIT_FROM_FORWARD
             self.wait_start_time = monotonic()
         
-        elif (self.state == _State.Reverse):
+        elif (self.state == _State.REVERSE):
             self.state = _State.WAIT_FROM_REVERSE
             self.wait_start_time = monotonic()
 

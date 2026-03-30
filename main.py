@@ -1,15 +1,8 @@
 from motors import MotorController
-from time import sleep
-from time import time as getTime
-import keyboard
+from time import perf_counter
+import curses
 
-
-shouldRun = True
-targetFPS = 60
-targetTPS = 100
-
-if __name__ == "__main__":
-
+def main(stdscr: curses.window):
     motors = MotorController()
     motors.set_speed(25)
 
@@ -25,24 +18,20 @@ if __name__ == "__main__":
         if key == ord("a"): lr = -1
         if key == ord("d"): lr += 1
 
-        if(targetFPS <= 0 or frames >= 1):
-            speed = 0
-            if keyboard.is_pressed("w"):
-                motors.forward(50)
-            elif keyboard.is_pressed("s"):
-                motors.reverse(50)
-            
-            if keyboard.is_pressed("esc"):
-                shouldRun = False
-            
-            frames -= 1
-
-        if(ticks >= 1):
-            #run tick
-            motors.update_both()
-            ticks -= 1
-        
-        previous = now
+        stdscr.move(1, 0)
+        stdscr.clrtoeol()
+        if lr == -1:
+            stdscr.addstr(1, 0, "Moving left") 
+            motors.left()
+        elif lr == 1: 
+            stdscr.addstr(1, 0, "Moving right") 
+            motors.right()
+        elif fw == 1: 
+            stdscr.addstr(1, 0, "Moving forward") 
+            motors.forward()
+        elif fw == -1: 
+            stdscr.addstr(1, 0, "Moving backward") 
+            motors.reverse()
 
         motors.update_both()
 

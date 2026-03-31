@@ -33,13 +33,14 @@ class Motor:
         self.float()
 
     def update(self):
-        dir = self.state.update_and_get()
+        pass
+        #dir = self.state.update_and_get()
 
-        match dir:
-            case Direction.BRAKE: self.__brake()
-            case Direction.FLOAT: self.__float()
-            case Direction.FORWARD: self.__forward()
-            case Direction.REVERSE: self.__reverse()
+        #match dir:
+        #    case Direction.BRAKE: self.__brake()
+        #    case Direction.FLOAT: self.__float()
+        #    case Direction.FORWARD: self.__forward()
+        #    case Direction.REVERSE: self.__reverse()
 
     def set_speed(self, speed):
         if speed is None: return
@@ -47,33 +48,33 @@ class Motor:
         speed = max(speed, 0)
         self.pwm.ChangeDutyCycle(speed)
 
-    def brake(self):
-        self.state.update(Direction.BRAKE)
+    #def brake(self):
+    #    self.state.update(Direction.BRAKE)
     
-    def __brake(self):
+    def brake(self):
         GPIO.output(self.pin_cntrl_1, GPIO.LOW)
         GPIO.output(self.pin_cntrl_2, GPIO.LOW)
         
-    def float(self):
-        self.state.update(Direction.FLOAT)
+    #def float(self):
+    #    self.state.update(Direction.FLOAT)
     
-    def __float(self):
+    def float(self):
         GPIO.output(self.pin_cntrl_1, GPIO.HIGH)
         GPIO.output(self.pin_cntrl_2, GPIO.HIGH)
 
-    def forward(self, speed = None):
-        self.set_speed(speed)
-        self.state.update(Direction.FORWARD)
+    #def forward(self, speed = None):
+    #    self.set_speed(speed)
+    #    self.state.update(Direction.FORWARD)
 
-    def __forward(self):
+    def forward(self):
         GPIO.output(self.pin_cntrl_1, GPIO.HIGH)
         GPIO.output(self.pin_cntrl_2, GPIO.LOW)
 
-    def reverse(self, speed = None):
-        self.set_speed(speed)
-        self.state.update(Direction.REVERSE)
+    #def reverse(self, speed = None):
+    #    self.set_speed(speed)
+    #    self.state.update(Direction.REVERSE)
 
-    def __reverse(self):
+    def reverse(self):
         GPIO.output(self.pin_cntrl_1, GPIO.LOW)
         GPIO.output(self.pin_cntrl_2, GPIO.HIGH)
 
@@ -88,12 +89,12 @@ class MotorController:
         self.left_motor = Motor(PIN_L_PWM, PIN_L_CNTRL_1, PIN_L_CNTRL_2)
 
     def forward(self, speed = None):
-        self.right_motor.forward(speed)
-        self.left_motor.forward(speed)
+        self.right_motor.forward()
+        self.left_motor.forward()
 
     def reverse(self, speed = None):
-        self.right_motor.reverse(speed)
-        self.left_motor.reverse(speed)
+        self.right_motor.reverse()
+        self.left_motor.reverse()
 
     def set_speed(self, speed):
         self.right_motor.set_speed(speed)
@@ -108,12 +109,12 @@ class MotorController:
         self.left_motor.float()
 
     def right(self, speed=None):
-        self.right_motor.forward(speed)
-        self.left_motor.reverse(speed)
+        self.right_motor.forward()
+        self.left_motor.reverse()
 
     def left(self, speed=None):
-        self.right_motor.reverse(speed)
-        self.left_motor.forward(speed)
+        self.right_motor.reverse()
+        self.left_motor.forward()
 
     def update_both(self):
         self.right_motor.update()

@@ -88,14 +88,14 @@ class MotorController:
         now = monotonic()
         if (new_dir == 1):
             since_reverse = now - self.reverse_timestamp
-            if (since_reverse < SAFETY_BRAKE_TIME): 
-                self.brake()
+            if (since_reverse < SAFETY_BRAKE_TIME):
+                self.safety_brake()
                 sleep(SAFETY_BRAKE_TIME - since_reverse)
 
         if (new_dir == -1):
             since_forward = now - self.forward_timestamp
-            if (since_forward < SAFETY_BRAKE_TIME): 
-                self.brake()
+            if (since_forward < SAFETY_BRAKE_TIME):
+                self.safety_brake()
                 sleep(SAFETY_BRAKE_TIME - since_forward)
 
     def forward(self):
@@ -140,6 +140,10 @@ class MotorController:
         self.right_motor.brake()
         self.left_motor.brake()
         self.direction = 0
+
+    def safety_brake(self):
+        self.right_motor.brake()
+        self.left_motor.brake()
 
     def float(self):
         self.update_state(0)

@@ -15,7 +15,7 @@ PIN_L_CNTRL_1 = 5
 PIN_L_CNTRL_2 = 6
 
 TURN_SLOW_WHEEL_SPEED_MULT = 0.2
-SAFETY_BRAKE_TIME = 0.1
+SAFETY_BRAKE_TIME = 0.5
 
 class Motor:
     def __init__(self, pin_pwm, pin_cntrl_1, pin_cntrl_2):
@@ -76,7 +76,7 @@ class MotorController:
         if (self.direction == 1 and new_dir != 1):
             self.forward_timestamp = monotonic()
 
-        elif (self.direction == -1 and new_dir != -1):
+        if (self.direction == -1 and new_dir != -1):
             self.reverse_timestamp = monotonic()
 
         self.direction = new_dir
@@ -88,10 +88,15 @@ class MotorController:
         now = monotonic()
         if (new_dir == 1):
             since_reverse = now - self.reverse_timestamp
-            if (since_reverse < SAFETY_BRAKE_TIME): sleep(SAFETY_BRAKE_TIME - since_reverse)
+            if (since_reverse < SAFETY_BRAKE_TIME): 
+                self.brake()
+                sleep(SAFETY_BRAKE_TIME - since_reverse)
+
         if (new_dir == -1):
             since_forward = now - self.forward_timestamp
-            if (since_forward < SAFETY_BRAKE_TIME): sleep(SAFETY_BRAKE_TIME - since_forward)
+            if (since_forward < SAFETY_BRAKE_TIME): 
+                self.brake()
+                sleep(SAFETY_BRAKE_TIME - since_forward)
 
     def forward(self):
         self.safe_brake_if_needed(1)

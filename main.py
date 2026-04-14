@@ -17,10 +17,18 @@ def main(stdscr: curses.window):
             stdscr.move(1, 0)
             stdscr.clrtoeol()   
             if key == ord("q"): break
-            elif key == ord("w"): motors.forward()
-            elif key == ord("s"): motors.reverse()
-            elif key == ord("a"): motors.left()
-            elif key == ord("d"): motors.right()
+            elif key == ord("w"): 
+                stdscr.addstr(1, 0, "forward!")
+                motors.forward()
+            elif key == ord("s"): 
+                stdscr.addstr(1, 0, "back!")
+                motors.reverse()
+            elif key == ord("a"): 
+                stdscr.addstr(1, 0, "left!")
+                motors.left()
+            elif key == ord("d"): 
+                stdscr.addstr(1, 0, "right!")
+                motors.right()
             else: motors.brake()
 
     motors.cleanup()

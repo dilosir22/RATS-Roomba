@@ -15,7 +15,7 @@ PIN_L_CNTRL_1 = 5
 PIN_L_CNTRL_2 = 6
 
 TURN_SLOW_WHEEL_SPEED_MULT = 0.2
-SAFETY_BRAKE_TIME = 0.5
+SAFETY_BRAKE_TIME = 0.1
 
 class Motor:
     def __init__(self, pin_pwm, pin_cntrl_1, pin_cntrl_2):
